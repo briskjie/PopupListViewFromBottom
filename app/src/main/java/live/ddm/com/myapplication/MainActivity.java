@@ -71,13 +71,13 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 R.layout.item_layout,
-                your_array_list );
+                your_array_list);
 
         lv.setAdapter(arrayAdapter);
     }
 
     public void move(View view) {
-        llListview.smoothScrollBy(0, llListview.getTop(), 0, llListview.getTop() - DensityUtils.dp2px(this, 250));
+        llListview.show();
     }
 
 }

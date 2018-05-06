@@ -3,6 +3,7 @@ package live.ddm.com.myapplication;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -20,8 +21,6 @@ public class CustomView extends LinearLayout {
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mScroller = new Scroller(context);
-
-
     }
 
     @Override
@@ -29,6 +28,7 @@ public class CustomView extends LinearLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         initTop = getTop();
         listView = (ListView) getChildAt(0);
+
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -47,20 +47,15 @@ public class CustomView extends LinearLayout {
 
 
     public void smoothScrollBy(int startX, int startY, int endX, int endY) {
-
         //设置mScroller的滚动偏移量
         mScroller.startScroll(startX, startY, endX - startX, endY - startY, 1000);
-        invalidate();//这里必须调用invalidate()才能保证computeScroll()会被调用，否则不一定会刷新界面，看不到滚动效果
+        invalidate();
     }
 
     @Override
     public void computeScroll() {
-        //先判断mScroller滚动是否完成   
         if (mScroller.computeScrollOffset()) {
-            //这里调用View的scrollTo()完成实际的滚动   
             offsetTopAndBottom(mScroller.getCurrY() - getTop());
-            //必须调用该方法，否则不一定能看到滚动效果
-            System.out.println("cxx_top_bottom:" + getTop() + ":" + getBottom());
             postInvalidate();
         }
         super.computeScroll();
@@ -141,5 +136,9 @@ public class CustomView extends LinearLayout {
                 break;
         }
         return true;
+    }
+
+    public void show() {
+        smoothScrollBy(0, initTop, 0, initTop - DensityUtils.dp2px(getContext(), 250));
     }
 }
