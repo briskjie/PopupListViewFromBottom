@@ -3,7 +3,6 @@ package live.ddm.com.myapplication;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -103,9 +102,7 @@ public class CustomView extends LinearLayout {
                 int t = getTop() + dy;
                 int b = getBottom() + dy;
 
-
                 scrollY = initTop - t;
-                System.out.println("cxx:scrollY" + scrollY);
                 //下面判断移动是否超出屏幕
                 if (scrollY < DensityUtils.dp2px(getContext(), 500)) {
                     layout(l, t, r, b);

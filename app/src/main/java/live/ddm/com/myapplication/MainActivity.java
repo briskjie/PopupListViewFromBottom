@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 R.layout.item_layout,
-                your_array_list);
+                your_array_list );
 
         lv.setAdapter(arrayAdapter);
     }
