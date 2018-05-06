@@ -2,6 +2,7 @@ package live.ddm.com.myapplication;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
@@ -16,6 +17,8 @@ public class CustomView extends LinearLayout {
     private int scrollY;
     private boolean scrollUp;
     private int initTop;
+    private int mHeight;
+    private int ANIM_TIME=500;
 
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -26,8 +29,8 @@ public class CustomView extends LinearLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         initTop = getTop();
+        mHeight = getHeight();
         listView = (ListView) getChildAt(0);
-
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -47,7 +50,7 @@ public class CustomView extends LinearLayout {
 
     public void smoothScrollBy(int startX, int startY, int endX, int endY) {
         //设置mScroller的滚动偏移量
-        mScroller.startScroll(startX, startY, endX - startX, endY - startY, 1000);
+        mScroller.startScroll(startX, startY, endX - startX, endY - startY, ANIM_TIME);
         invalidate();
     }
 
@@ -68,6 +71,7 @@ public class CustomView extends LinearLayout {
     public void setOnTop(boolean onTop) {
         this.onTop = onTop;
     }
+
 
 
     @Override
@@ -104,38 +108,34 @@ public class CustomView extends LinearLayout {
 
                 scrollY = initTop - t;
                 //下面判断移动是否超出屏幕
-                if (scrollY < DensityUtils.dp2px(getContext(), 500)) {
+                if (scrollY < mHeight) {
                     layout(l, t, r, b);
                     lastY = (int) event.getRawY();
                     postInvalidate();
                 }
-
                 break;
             case MotionEvent.ACTION_UP:
-                if (scrollY > (DensityUtils.dp2px(getContext(), 500 / 2)) && scrollUp) {
-                    smoothScrollBy(0, getTop(), 0, initTop - DensityUtils.dp2px(getContext(), 500));
-                    postInvalidate();
+                if (scrollY > (mHeight/2) && scrollUp) {
+                    smoothScrollBy(0, getTop(), 0, initTop - mHeight);
                     setOnTop(true);
-                } else if (scrollY <= DensityUtils.dp2px(getContext(), 500 / 2) && scrollUp) {
+                } else if (scrollY <= (mHeight/2) && scrollUp) {
                     setOnTop(false);
-                    smoothScrollBy(0, getTop(), 0, initTop - DensityUtils.dp2px(getContext(), 250));
-                    postInvalidate();
-                } else if (!scrollUp && scrollY > DensityUtils.dp2px(getContext(), 500 / 2)) {
+                    smoothScrollBy(0, getTop(), 0, initTop - (mHeight/2));
+                } else if (!scrollUp && scrollY > (mHeight/2)) {
                     setOnTop(false);
-                    smoothScrollBy(0, getTop(), 0, initTop - DensityUtils.dp2px(getContext(), 250));
-                    postInvalidate();
-                } else if (!scrollUp && scrollY <= DensityUtils.dp2px(getContext(), 500 / 2)) {
+                    smoothScrollBy(0, getTop(), 0, initTop - (mHeight/2));
+                } else if (!scrollUp && scrollY <= (mHeight/2)) {
                     setOnTop(false);
                     smoothScrollBy(0, getTop(), 0, initTop);
-                    postInvalidate();
-                }
 
+                }
+                postInvalidate();
                 break;
         }
         return true;
     }
 
     public void show() {
-        smoothScrollBy(0, initTop, 0, initTop - DensityUtils.dp2px(getContext(), 250));
+        smoothScrollBy(0, initTop, 0, initTop - (mHeight/2));
     }
 }
