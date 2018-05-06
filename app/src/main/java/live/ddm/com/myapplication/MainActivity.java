@@ -76,82 +76,8 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(arrayAdapter);
     }
 
-    int initTop;
-    int initBottom;
-
     public void move(View view) {
-        initTop = llListview.getTop();
-        initBottom = llListview.getBottom();
         llListview.smoothScrollBy(0, llListview.getTop(), 0, llListview.getTop() - DensityUtils.dp2px(this, 250));
-        llListview.setOnTouchListener(new LLTouchListener());
     }
-
-
-    public class LLTouchListener implements View.OnTouchListener {
-        int lastX;
-        int delatY;
-        int lastY;
-        int scrollY;
-        boolean scrollUp;
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        int screenHeight = displayMetrics.heightPixels;
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    lastX = (int) event.getRawX();
-                    lastY = (int) event.getRawY();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    int dy = (int) event.getRawY() - lastY;
-                    if (dy < 0) {
-                        scrollUp = true;
-                    } else {
-                        scrollUp = false;
-                    }
-                    int l = v.getLeft();
-                    int r = v.getRight();
-                    int t = v.getTop() + dy;
-                    int b = v.getBottom() + dy;
-
-
-                    scrollY = initTop - t;
-                    System.out.println("cxx:scrollY" + scrollY);
-                    //下面判断移动是否超出屏幕
-                    if (scrollY < DensityUtils.dp2px(MainActivity.this, 500)) {
-                        v.layout(l, t, r, b);
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        v.postInvalidate();
-                    }
-
-                    break;
-                case MotionEvent.ACTION_UP:
-                    if (scrollY > (DensityUtils.dp2px(MainActivity.this, 500/2)) && scrollUp) {
-                        llListview.smoothScrollBy(0, v.getTop(), 0, initTop - DensityUtils.dp2px(MainActivity.this, 500));
-                        v.postInvalidate();
-                        ((CustomView)v).setOnTop(true);
-                    } else if (scrollY <= DensityUtils.dp2px(MainActivity.this, 500/2) && scrollUp) {
-                        ((CustomView)v).setOnTop(false);
-                        llListview.smoothScrollBy(0, v.getTop(), 0, initTop - DensityUtils.dp2px(MainActivity.this, 250));
-                        v.postInvalidate();
-                    } else if (!scrollUp && scrollY > DensityUtils.dp2px(MainActivity.this, 500 / 2)) {
-                        ((CustomView)v).setOnTop(false);
-                        llListview.smoothScrollBy(0, v.getTop(), 0, initTop - DensityUtils.dp2px(MainActivity.this, 250));
-                        v.postInvalidate();
-                    } else if (!scrollUp && scrollY <= DensityUtils.dp2px(MainActivity.this, 500 / 2)) {
-                        ((CustomView)v).setOnTop(false);
-                        llListview.smoothScrollBy(0, v.getTop(), 0, initTop);
-                        v.postInvalidate();
-                    }
-
-                    break;
-            }
-            return true;
-        }
-    }
-
 
 }
