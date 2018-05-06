@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="live.ddm.com.myapplication.MainActivity">
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:onClick="move"
+        />
+
+    <live.ddm.com.myapplication.CustomView
+        android:id="@+id/llListview"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="parent">
+
+        <live.ddm.com.myapplication.MyListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        </live.ddm.com.myapplication.MyListView>
+
+    </live.ddm.com.myapplication.CustomView>
+
+</android.support.constraint.ConstraintLayout>
